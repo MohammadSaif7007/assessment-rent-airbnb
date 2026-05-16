@@ -12,8 +12,8 @@ Built using the [RevoData Asset Bundle Template](https://github.com/revodatanl/r
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                          SOURCE DATA (Volumes)                               │
-│                                                                              │
+│                          SOURCE DATA (Volumes)                              │
+│                                                                             │
 │   airbnb.csv (9,913 rows)          rentals.json (46,722 rows)               │
 │   • zipcode (mixed formats)        • city (17 cities)                       │
 │   • lat/lng                        • rent (messy strings)                   │
@@ -23,24 +23,24 @@ Built using the [RevoData Asset Bundle Template](https://github.com/revodatanl/r
                        │                          │
                        ▼                          ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        BRONZE LAYER (Delta Tables)                           │
-│                                                                              │
+│                        BRONZE LAYER (Delta Tables)                          │
+│                                                                             │
 │   bronze_airbnb                        bronze_rentals                       │
 │   • All columns as strings             • Array fields flattened             │
 │   • No type coercion                     (_id, crawledAt, firstSeenAt)      │
 │   • Lineage metadata added             • Lineage metadata added             │
 │     (_source, _ingested_at,              (_source, _ingested_at,            │
 │      _source_file)                        _source_file)                     │
-│                                                                              │
+│                                                                             │
 │   Replay point: re-process from here if cleaning logic changes downstream   │
 └──────────────────────┬──────────────────────────┬───────────────────────────┘
                        │                          │
                        ▼                          ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        SILVER LAYER (Delta Tables)                           │
-│                                                                              │
+│                        SILVER LAYER (Delta Tables)                          │
+│                                                                             │
 │   silver_airbnb                        silver_rentals                       │
-│                                                                              │
+│                                                                             │
 │   Cleaning steps:                      Cleaning steps:                      │
 │   ✓ Cast to proper types               ✓ Filter to Amsterdam only           │
 │   ✓ Normalize zipcode → PC4            ✓ Parse rent strings → float         │
@@ -49,25 +49,25 @@ Built using the [RevoData Asset Bundle Template](https://github.com/revodatanl/r
 │     postal codes (22.7% recovered)     ✓ Parse areaSqm, matchCapacity       │
 │     via point-in-polygon join          ✓ Flag rent outliers                 │
 │     against post_codes.geojson         ✓ Parse timestamps                   │
-│                                                                              │
-│   UDFs sourced from:                                                         │
+│                                                                             │
+│   UDFs sourced from:                                                        │
 │   src/assessment_rent_airbnb/cleaners.py (pure Python, zero Spark dep)      │
 └──────────────────────┬──────────────────────────┬───────────────────────────┘
                        │                          │
                        ▼                          ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         GOLD LAYER (Delta Tables)                            │
-│                                                                              │
-│   gold_postal_code_revenue                                                   │
-│                                                                              │
+│                         GOLD LAYER (Delta Tables)                           │
+│                                                                             │
+│   gold_postal_code_revenue                                                  │
+│                                                                             │
 │   Airbnb revenue model:               Kamernet revenue model:               │
-│   occupied_nights = 365 × 70%         gross = monthly_rent × 11 months     │
-│   gross = occupied_nights × price     maintenance = gross × 10%            │
+│   occupied_nights = 365 × 70%         gross = monthly_rent × 11 months      │
+│   gross = occupied_nights × price     maintenance = gross × 10%             │
 │   fees = gross × 3%                   net = gross − maintenance             │
 │   cleaning = turnovers × €30                                                │
 │   net = gross − fees − cleaning       All assumptions parameterized         │
 │                                       via Databricks widgets                │
-│                                                                              │
+│                                                                             │
 │   Output: per-PC4 comparison with revenue_advantage + recommended_strategy  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
