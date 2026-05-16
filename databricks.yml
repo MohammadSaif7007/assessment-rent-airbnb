@@ -1,0 +1,28 @@
+bundle:
+  name: assessment-rent-airbnb
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog name.
+    default: revodata
+  schema:
+    description: Schema name.
+    default: amsterdam_investment
+  data_path:
+    description: Path to raw source data in Volumes.
+    default: /Volumes/revodata/amsterdam_investment/raw_data
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-dd7d8567-1ddc.cloud.databricks.com
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-dd7d8567-1ddc.cloud.databricks.com
