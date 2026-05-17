@@ -41,7 +41,7 @@ data_path = dbutils.widgets.get("data_path")
 
 # COMMAND ----------
 
-sys.path.insert(0, "/Workspace/Users/mdsaif091994@gmail.com/assessment-rent-airbnb/src")
+sys.path.insert(0, "/Workspace/assessment-rent-airbnb/src")
 
 from assessment_rent_airbnb.cleaners import (
     normalize_postal_code_to_pc4,
